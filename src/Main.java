@@ -124,13 +124,13 @@ public class Main {
 
         sortby.selectByValue("year");
 
-        Thread.sleep(6000);    //sorting by miles
+        Thread.sleep(6000);    //sorting by years
         List<WebElement> year = driver.findElements(By.xpath("//h2[@class='title'] "));
         if (far.isEmpty()) {
             throw new RuntimeException();
         }
 
-        for (WebElement webElement : year) { //check if the miles sorted correct
+        for (WebElement webElement : year) { //check if the years sorted correct
             int hello1 = 0;
             if (Integer.parseInt(webElement.getText().substring(0, 5).replaceAll("[$,mi. ]", "")) > hello1){
 //            Assert.assertTrue(Integer.parseInt(webElement.getText().substring(0, 5).replaceAll("[$,mi. ]", "")) > hello1);
