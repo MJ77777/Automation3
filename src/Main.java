@@ -137,7 +137,7 @@ public class Main {
             hello1 = (Integer.parseInt(webElement.getText().substring(0, 5).replaceAll("[$,mi. ]", "")));
             System.out.println(hello1);
         }else {throw new RuntimeException();}
-driver.quit();
 
-    }
-}}
+    }driver.quit();
+
+    }}
