@@ -4,11 +4,12 @@ import org.openqa.selenium.support.ui.Select;
 import org.testng.Assert;
 
 import java.time.Duration;
+import java.time.Instant;
 import java.util.List;
 
 public class Main {
     public static void main(String[] args) throws InterruptedException {
-
+        Instant start = Instant.now();
 
         System.setProperty("webdriver.chrome.driver", "C:\\Users\\majd1\\Downloads\\chromedriver_win32\\chromedriver.exe");
         WebDriver driver = new ChromeDriver();
@@ -60,8 +61,8 @@ public class Main {
         driver.findElement(By.id("make-model-zip")).clear();
         driver.findElement(By.id("make-model-zip")).sendKeys("22182", Keys.ENTER);
 
-        Thread.sleep(6000);
-        List<WebElement> element = driver.findElements(By.xpath("//h2[@class='title']")); // to find common xpath for all elements
+        Thread.sleep(2000);
+        List<WebElement> element = driver.findElements(By.xpath("//h2[@class='title']")); // to find common xpath for all text
 
         if (element.isEmpty()) {
             throw new RuntimeException();
@@ -69,38 +70,37 @@ public class Main {
         System.out.println("list size is " + element.size()); // to check how many element I have
 
         for (WebElement count : element) {
-            System.out.println(count.getText().contains("Tesla")); // to check if all title had tesla
+            Assert.assertTrue(count.getText().contains("Tesla")); // to check if all title had tesla
         }
 
         WebElement element1 = driver.findElement(By.id("sort-dropdown")); // to select low price
         Select sortby = new Select(element1);
         sortby.selectByValue("list_price");
 
-        Thread.sleep(6000);
+        Thread.sleep(3000);
         List<WebElement> elements = driver.findElements(By.xpath("//span[@class='primary-price']"));
         if (elements.isEmpty()) {
             throw new RuntimeException();
         }
-        for (WebElement count : elements) { // to check if all prices sorted right
-            double num = 0.0;
-            Assert.assertTrue(Double.parseDouble(count.getText().replaceAll("[$,]", "")) > num);
+        double num = 0.0;
+         for (WebElement count : elements) { // to check if all prices sorted right
+            Assert.assertTrue(Double.parseDouble(count.getText().replaceAll("[$,]", "")) >= num);
             num = Double.parseDouble(count.getText().replaceAll("[$,]", ""));
             System.out.println(num);
         }
 
 
-        sortby.selectByValue("mileage_desc");
+        sortby.selectByValue("mileage_desc");//sorting by miles
 
 
-        Thread.sleep(6000);    //sorting by miles
+        Thread.sleep(3000);
         List<WebElement> elements1 = driver.findElements(By.xpath("//div[@class='mileage'][contains(text(),' mi.')]"));
         if (elements1.isEmpty()) {
             throw new RuntimeException();
         }
-
+        long hello1 = 1000000000;
         for (WebElement webElement : elements1) {
-            long hello1 = 1000000000;
-            Assert.assertTrue(Long.parseLong(webElement.getText().replaceAll("[$,mi. ]", "")) < hello1);
+             Assert.assertTrue(Long.parseLong(webElement.getText().replaceAll("[$,mi. ]", "")) < hello1);
             hello1 = (Long.parseLong(webElement.getText().replaceAll("[$,mi. ]", "")));
             System.out.println(hello1);
         }
@@ -108,36 +108,38 @@ public class Main {
 
         sortby.selectByValue("distance");
 
-        Thread.sleep(6000);    //sorting by miles
+        Thread.sleep(3000);    //sorting by distance from zipcode
         List<WebElement> far = driver.findElements(By.xpath("//div[@data-qa='miles-from-user']"));
         if (far.isEmpty()) {
             throw new RuntimeException();
         }
 
-        for (WebElement webElement : far) { //check if the miles sorted correct
-            int hello1 = 0;
-            Assert.assertTrue(Integer.parseInt(webElement.getText().substring(0, 4).replaceAll("[$,mi. ]", "")) > hello1);
-            hello1 = (Integer.parseInt(webElement.getText().substring(0, 4).replaceAll("[$,mi. ]", "")));
-            System.out.println(hello1);
+        int hello12 = 0;
+        for (WebElement webElement : far) { //check if the distance miles from your zipcode sorted correct
+            Assert.assertTrue(Integer.parseInt(webElement.getText().substring(0, 4).replaceAll("[$,mi. ]", "")) >= hello12);
+            hello12 = (Integer.parseInt(webElement.getText().substring(0, 4).replaceAll("[$,mi. ]", "")));
+            System.out.println(hello12);
         }
 
 
         sortby.selectByValue("year");
 
-        Thread.sleep(6000);    //sorting by years
+        Thread.sleep(3000);    //sorting by years
         List<WebElement> year = driver.findElements(By.xpath("//h2[@class='title'] "));
         if (far.isEmpty()) {
             throw new RuntimeException();
         }
 
+        int hello13 = 0;
         for (WebElement webElement : year) { //check if the years sorted correct
-            int hello1 = 0;
-            if (Integer.parseInt(webElement.getText().substring(0, 5).replaceAll("[$,mi. ]", "")) > hello1){
-//            Assert.assertTrue(Integer.parseInt(webElement.getText().substring(0, 5).replaceAll("[$,mi. ]", "")) > hello1);
-            hello1 = (Integer.parseInt(webElement.getText().substring(0, 5).replaceAll("[$,mi. ]", "")));
-            System.out.println(hello1);
-        }else {throw new RuntimeException();}
+
+            Assert.assertTrue(Integer.parseInt(webElement.getText().substring(0, 5).replaceAll("[$,mi. ]", "")) >= hello13);
+            hello13 = (Integer.parseInt(webElement.getText().substring(0, 5).replaceAll("[$,mi. ]", "")));
+            System.out.println(hello13);
 
     }driver.quit();
+        Instant end = Instant.now();
+        Duration timeElapsed = Duration.between(start, end);
+        System.out.println("Time taken: "+ timeElapsed.toMillis() +" milliseconds");
 
     }}
